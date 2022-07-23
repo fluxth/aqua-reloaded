@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, nativeTheme, ipcMain } = require("electron");
 const path = require("path");
 
 const createWindow = () => {
@@ -7,23 +7,36 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    roundedCorners: false,
+    hasShadow: false,
+    transparent: true,
+    titlebarStyle: "hidden",
+    //vibrancy: "content",
+    frame: false,
+    darkTheme: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
   });
-  console.log(path.join(__dirname, "preload.js"));
 
   // and load the index.html of the app.
-  mainWindow.loadFile("dist/index.html");
-
-  // Open the DevTools.
+  //if (process.env.NODE_ENV === "development") {
+  mainWindow.loadURL(`http://localhost:5173`);
   mainWindow.webContents.openDevTools();
+  //} else {
+  //  mainWindow.loadFile("dist/index.html");
+  //}
+  //
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  nativeTheme.themeSource = "light";
+
+  ipcMain.on("close-window", () => console.log("close"));
+
   createWindow();
 
   app.on("activate", () => {

@@ -4,8 +4,9 @@
   "version": "0.1.0",
   "main": "dist/electron/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "yarn build:svelte && yarn build:electron",
+    "dev": "NODE_ENV=development yarn build:electron && electron --enable-transparent-visuals .",
+    "server": "NODE_ENV=development vite",
+    "build": "yarn build:electron && yarn build:svelte",
     "build:svelte": "vite build",
     "build:electron": "vite build -c vite_electron.config.js",
     "preview": "vite preview"
